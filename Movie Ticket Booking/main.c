@@ -8,12 +8,12 @@ int count=0;
 int id2=1000;
 int main()
 {
-	int **seat,choice,price=500,slection,i;
+	int **seat,choice,price=500,selection,i;
 	seat=(int **)calloc(101,sizeof(int *));
 	for (i=0;i<3;i++)
 		*(seat+i)=(int *)calloc(101,sizeof(int ));
-	int x;
-	while(x!=5)
+	
+	while(1)
 	{
 		choice=choice1();
 		switch(choice)
@@ -25,16 +25,16 @@ int main()
 				details();
 				break;	
 			case 3:	
-				slection=movie();
-				reservation(seat[slection-1],price,slection);	
+				selection=movie();
+				reservation(seat[selection-1],price,selection);	
 				count++;
 				break;
 			case 4:
-				slection=cmovie();	
-				cancel(seat[slection-1]);	
+				selection=cmovie();	
+				cancel(seat[selection-1]);	
 				break;
 			case 5:
-				x=5;
+				exit(0);
 				break;
 			default: 
 				printf("Choice not available\n");
@@ -44,21 +44,22 @@ int main()
 }
 int changeprize(int prize)
 {
-	char pass[10],pak[10]="pass";
+	char pass[10];
 	printf("Enter the password to change price of ticket: ");
 	scanf("%s",&pass);
-	if (strcmp(pass,pak)==0)
+	if (strcmp(pass,"pass")==0)
 	{
 		printf("Please enter new price: ");
 		scanf("%d",&prize);
-		system("PAUSE");
+		printf("Press Any key to Continue...");
+		getchar();getchar();
 		system("clear");
 	}
 	else 
 		printf("The entered password is wrong! ");
 	return prize;
 }
-void reservation(int *array,int price,int slection)
+void reservation(int *array,int price,int selection)
 {          
 		int i,j;
 		printf("\n                                SCREEN\n\n\n");
@@ -72,14 +73,16 @@ void reservation(int *array,int price,int slection)
 				printf("\n\n");
 		}
 		printf("Please enter your name: ");
-		scanf(" %19[^\n]%*[^\n]",&person[count].name);
+		//scanf(" %19[^\n]%*[^\n]",&person[count].name);
+		getchar();
+		gets(person[count].name);
 		printf("Please enter your phone number: ");
 		scanf("%u",&person[count].phone);
 		printf("Which seat number you want? ");
 		scanf("%d",&j);
 		if (j>100||j<1)
 			{
-				printf("seat1 number is unavailable in this theater\n");
+				printf("seat number is unavailable in this theater\n");
 				printf("Please re-enter seat number: ");
 				scanf("%d",&j);
 			}
@@ -91,9 +94,9 @@ void reservation(int *array,int price,int slection)
 		else			
 			array[j]=1;
 		person[count].seat=j;
-		if (slection==1)
+		if (selection==1)
 			ticket1(j,person[count].name,id2,price);
-		else if (slection==2) 	
+		else if (selection==2) 
 			ticket2(j,person[count].name,id2,price);
 		else 
 			ticket3(j,person[count].name,id2,price);			
@@ -134,6 +137,54 @@ void cancel(int *array)
 	  if (stop!=5)	
 	  		printf("Ticket ID number is incorrect please enter right one to cancel ticket: \n");
 }
+
+void details(void)
+{
+	int i;
+	char pass[10];
+	printf("Enter the password to see details: ");
+	scanf("%s",&pass);
+	if (strcmp(pass,"pass")==0)
+	{
+		for (i=0;i<count;i++)
+		{
+			printf("seat no: %d is booked by %s booking id is %d\n",person[i].seat,person[i].name,person[i].id);
+		}
+	}
+	else      
+	{                                          
+		printf("Entered password is wrong \n");
+	}
+		getchar();
+		printf("Press Any key to Continue...");
+		getchar();
+		system("clear");
+	
+}             
+int movie()
+{
+	int i;
+	system("clear");
+	printf("\t\t\twhich movie you want to see?\n");
+	printf("\t\t\t----------------------------\n\n");
+	printf("\t\t\tpress 1 for Avengers: EndGame\n\n");
+	printf("\t\t\tpress 2 for Captain Marvel\n\n");
+	printf("\t\t\tpress 3 for Spider-Man: Far From Home\n");
+	scanf("%d",&i);
+	system("clear");
+	return i;
+}
+int cmovie()
+{
+	int i;
+	printf("\t\t\twhich movie ticket you want to cancel\n");
+	printf("\t\t\t-------------------------------------\n");
+	printf("\t\t\tpress 1 for Avengers: EndGame\n\n");
+	printf("\t\t\tpress 2 for Captain Marvel\n\n");
+	printf("\t\t\tpress 3 for Spider-Man: Far From Home\n");
+	scanf("%d",&i);
+	return i;		
+}
 void ticket1(int choice,char name[10],int id2,int price)
 {
 		system("clear");
@@ -150,42 +201,6 @@ void ticket1(int choice,char name[10],int id2,int price)
 		person[count].id=id2;
         printf("\t============================================================\n");
         return;
-}
-void details(void)
-{
-	int i;
-	char pass[10],pak[10]="pass";
-	printf("Enter the password to see details: ");
-	scanf("%s",&pass);
-	if (strcmp(pass,pak)==0)
-	{
-		for (i=0;i<count;i++)
-		{
-			printf("seat no: %d is booked by %s booking id is %d\n",person[i].seat,person[i].name,person[i].id);
-		}
-	}
-	else      
-	{                                          
-		printf("Entered password is wrong \n");
-	}
-		getchar();
-		getchar();
-		system("pause");
-		system("clear");
-	
-}             
-int movie(void)
-{
-	int i;
-	system("clear");
-	printf("\t\t\twhich movie you want to see?\n");
-	printf("\t\t\t----------------------------\n\n");
-	printf("\t\t\tpress 1 for Avengers: EndGame\n\n");
-	printf("\t\t\tpress 2 for Captain Marvel\n\n");
-	printf("\t\t\tpress 3 for Spider-Man: Far From Home\n");
-	scanf("%d",&i);
-	system("clear");
-	return i;
 }
 void ticket2(int choice,char name[10],int id2,int price)
 {
@@ -204,17 +219,7 @@ void ticket2(int choice,char name[10],int id2,int price)
         printf("\t============================================================\n");
         return;
 }
-int cmovie(void)
-{
-	int i;
-	printf("\t\t\twhich movie ticket you want to cancel\n");
-	printf("\t\t\t-------------------------------------\n");
-	printf("\t\t\tpress 1 for Avengers: EndGame\n\n");
-	printf("\t\t\tpress 2 for Captain Marvel\n\n");
-	printf("\t\t\tpress 3 for Spider-Man: Far From Home\n");
-	scanf("%d",&i);
-	return i;		
-}
+
 void ticket3(int choice,char name[10],int id2,int price)
 {
 		system("clear");
