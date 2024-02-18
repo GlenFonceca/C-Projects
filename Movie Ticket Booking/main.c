@@ -5,7 +5,7 @@
 #include<strings.h>
 struct moviedetails person[300];
 int count=0;
-int id2=1000;
+int m[]={10000,20000,30000};
 int main()
 {
 	int **seat,choice,price=500,selection,i;
@@ -51,12 +51,18 @@ int changeprize(int prize)
 	{
 		printf("Please enter new price: ");
 		scanf("%d",&prize);
-		printf("Press Any key to Continue...");
-		getchar();getchar();
-		system("clear");
+		getchar();
+		printf("\n\nPress Any key to Continue...");
+		getchar();
 	}
 	else 
+	{
 		printf("The entered password is wrong! ");
+		getchar();
+		printf("\n\nPress Any key to Continue...");
+		getchar();
+	}
+	system("clear");
 	return prize;
 }
 void reservation(int *array,int price,int selection)
@@ -94,17 +100,22 @@ void reservation(int *array,int price,int selection)
 		else			
 			array[j]=1;
 		person[count].seat=j;
-		if (selection==1)
-			ticket1(j,person[count].name,id2,price);
-		else if (selection==2) 
-			ticket2(j,person[count].name,id2,price);
-		else 
-			ticket3(j,person[count].name,id2,price);			
-		id2++;	
+		if (selection==1){
+			m[0]++;
+			ticket1(j,person[count].name,m[0],price);
+		}
+		else if (selection==2){
+			m[1]++;
+			ticket2(j,person[count].name,m[1],price);
+		}
+		else {
+			m[2]++;
+			ticket3(j,person[count].name,m[2],price);	
+		}		
 }
 int choice1(void)
 {
-	//system("clear");
+	system("clear");
 	int choice;
 	printf("                 Simple Movie Ticket Booking System\n");
 	printf(" ==================================================================\n");
@@ -120,6 +131,7 @@ int choice1(void)
 }
 void cancel(int *array)
 {
+	  //system("clear");
       int Cseat,i,stop;
 	  printf("Please enter ID number of ticket: ");
 	  scanf("%d",&Cseat);
@@ -131,11 +143,19 @@ void cancel(int *array)
 					 system("clear");
 					 printf("%s your seat is %d cancelled!!!\n\n",person[i].name,person[i].seat);
 					 array[person[i].seat]=0;
-					 i=300;
+					 for(int k=i;k<count;k++)
+					 {
+						person[k]=person[k+1];
+					 }
+					 count--;
+					 break;
 	  		}
 	  }
 	  if (stop!=5)	
 	  		printf("Ticket ID number is incorrect please enter right one to cancel ticket: \n");
+		getchar();
+		printf("\n\nPress Any key to Continue...");
+		getchar();
 }
 
 void details(void)
@@ -156,9 +176,8 @@ void details(void)
 		printf("Entered password is wrong \n");
 	}
 		getchar();
-		printf("Press Any key to Continue...");
+		printf("\n\nPress Any key to Continue...");
 		getchar();
-		system("clear");
 	
 }             
 int movie()
@@ -176,6 +195,7 @@ int movie()
 }
 int cmovie()
 {
+	system("clear");
 	int i;
 	printf("\t\t\twhich movie ticket you want to cancel\n");
 	printf("\t\t\t-------------------------------------\n");
@@ -200,6 +220,9 @@ void ticket1(int choice,char name[10],int id2,int price)
         printf("\t                                              price . : %d  \n\n",price);
 		person[count].id=id2;
         printf("\t============================================================\n");
+		getchar();
+		printf("\n\nPress Any key to Continue...");
+		getchar();
         return;
 }
 void ticket2(int choice,char name[10],int id2,int price)
@@ -217,6 +240,9 @@ void ticket2(int choice,char name[10],int id2,int price)
         printf("\t                                              price . : %d  \n\n",price);
         person[count].id=id2;
         printf("\t============================================================\n");
+		getchar();
+		printf("\n\nPress Any key to Continue...");
+		getchar();
         return;
 }
 
@@ -235,5 +261,8 @@ void ticket3(int choice,char name[10],int id2,int price)
         printf("\t                                              price . : %d  \n\n",price);
         person[count].id=id2;
         printf("\t============================================================\n");
+		getchar();
+		printf("\n\nPress Any key to Continue...");
+		getchar();
         return;
 }
