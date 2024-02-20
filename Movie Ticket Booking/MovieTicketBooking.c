@@ -10,17 +10,16 @@ struct moviedetails{
 struct moviedetails person[300];
 int count=0;
 int m[]={10000,20000,30000};
-int movie1booking=0,movie2booking=0,movie3booking=0;
 
 //Function Declarations
 int changeprize(int);
 void reservation(int *,int,int );
 int choice1();
 void cancel(int *);        
-void ticket1(int choice,char name[],int id,int price);
-void ticket2(int choice,char name[],int id,int price);
-void ticket3(int choice,char name[],int id,int price);
-int cmovie();
+void ticket1(int choice,char name[20],int id,int price);
+void ticket2(int choice,char name[20],int id,int price);
+void ticket3(int choice,char name[20],int id,int price);
+int Moviedetails();
 int movie();
 void details();
 
@@ -54,7 +53,7 @@ int main()
 				exit(0);
 				break;
 			default: 
-				printf("Choice not available\n");
+				printf("Option not available\n");
                 getchar();
 		        printf("\n\nPress Enter to Continue...");
 		        getchar();
@@ -62,7 +61,7 @@ int main()
 		}
 	}
 }
-int changeprize(int prize)
+int changeprize(int price)
 {
 	char pass[10];
 	printf("Enter the password to change price of ticket: ");
@@ -70,7 +69,7 @@ int changeprize(int prize)
 	if (strcmp(pass,"pass")==0)
 	{
 		printf("Please enter new price: ");
-		scanf("%d",&prize);
+		scanf("%d",&price);
 		getchar();
 		printf("\n\nPress Enter to Continue...");
 		getchar();
@@ -83,7 +82,7 @@ int changeprize(int prize)
 		getchar();
 	}
 	system("clear");
-	return prize;
+	return price;
 }
 void reservation(int *array,int price,int selection)
 {          
@@ -105,35 +104,39 @@ void reservation(int *array,int price,int selection)
 		printf("Please enter your phone number: ");
 		scanf("%u",&person[count].phone);
 		printf("Which seat number you want? ");
+		re_enter:
 		scanf("%d",&j);
 		if (j>100||j<1)
 			{
+				
 				printf("seat number is unavailable in this theater\n");
 				printf("Please re-enter seat number: ");
-				scanf("%d",&j);
+				goto re_enter;
+				
 			}
 		if (array[j]==1)
 			{
 				printf("Sorry, this ticket is already booked! Please choose another seat.\n");
-				scanf("%d",&j);
+				goto re_enter;
 			}
-		else			
+		else{	
 			array[j]=1;
+		}
 		person[count].seat=j;
 		if (selection==1){
 			m[0]++;
 			ticket1(j,person[count].name,m[0],price);
-            movie1booking++;
+            
 		}
 		else if (selection==2){
 			m[1]++;
 			ticket2(j,person[count].name,m[1],price);
-            movie2booking++;
+            
 		}
 		else if(selection==3){
 			m[2]++;
 			ticket3(j,person[count].name,m[2],price);
-            movie3booking++;	
+           
 		}		
 }
 int choice1(void)
@@ -156,14 +159,19 @@ int choice1(void)
 void cancel(int *array)
 {
 	  system("clear");
-      int Cseat,i,stop;
+      int Cseat,i,stop,flag=0;
 	  printf("Please enter ID number of ticket: ");
 	  scanf("%d",&Cseat);
 	  for (i=0;i<100;i++)
-	  {
-	  		if(Cseat==person[i].id)
+	  	{
+			if(Cseat==person[i].id)
+			{
+				flag=1;
+				break;
+			}
+		}
+	  		if(flag==1)
 	  		{
-					 stop=5;
 					 system("clear");
 					 printf("%s your seat No %d is cancelled!!!\n\n",person[i].name,person[i].seat);
 					 array[person[i].seat]=0;
@@ -172,11 +180,13 @@ void cancel(int *array)
 						person[k]=person[k+1];
 					 }
 					 count--;
-					 break;
 	  		}
-	  }
-	  if (stop!=5)	
-	  		printf("Ticket ID number is incorrect please enter right one to cancel ticket: \n");
+			else{
+				printf("Ticket ID number is incorrect please enter right one to cancel ticket: \n");
+			}
+		
+	//   if (stop!=5)	
+	//   		printf("Ticket ID number is incorrect please enter right one to cancel ticket: \n");
 		getchar();
 		printf("\n\nPress Enter to Continue...");
 		getchar();
@@ -184,61 +194,67 @@ void cancel(int *array)
 
 void details(void)
 {
-	int i;
+	int i,bookings=0;
 	char pass[10];
     system("clear");
 	printf("Enter the password to see details: ");
 	scanf("%s",pass);
-    int selection=cmovie();
+    
 	if (strcmp(pass,"pass")==0)
 	{
-		
+		int selection=Moviedetails();
             switch(selection)
             {
-
                 case 1:
                     printf("\t-----------------THEATER BOOKING DETAILS----------------\n");
                     printf("\t-----------------|   Avengers Endgame  |----------------\n");
                     printf("\t============================================================\n");
                     //If no seats are Booked
-                    if(movie1booking==0)
-                        printf("\n\t\t\t!!!!!!! NO BOOKINGS !!!!!!! \n\n");
-
-                    for (i=0;i<movie1booking;i++)
+                    for (i=0;i<count;i++)
                     {
-                        if(person[i].id>10000&&person[i].id<20000)
-                        printf("\tseat no: %d is booked by %s booking id is %d\n",person[i].seat,person[i].name,person[i].id);
+                        if(person[i].id>10000&&person[i].id<20000){
+                        	printf("\tseat no: %d is booked by %s booking id is %d\n",person[i].seat,person[i].name,person[i].id);
+							bookings++;
+						}
                     }
+					if(bookings==0)
+					{
+						printf("\n\t\t\t!!!!!!! NO BOOKINGS !!!!!!! \n\n");
+					}
                     printf("\t============================================================\n");
                     break;
                 case 2:
                     printf("\t-----------------THEATER BOOKING DETAILS----------------\n");
                     printf("\t------------------|   Captain marvel  |-----------------\n");
                     printf("\t============================================================\n");
-
-                    if(movie2booking==0)
-                        printf("\n\t\t\t!!!!!!! NO BOOKINGS !!!!!!! \n\n");
-                    
-                    for (i=0;i<movie2booking;i++)
+                    for (i=0;i<count;i++)
                     {
-                        if(person[i].id>20000&&person[i].id<30000)
-                        printf("\tseat no: %d is booked by %s booking id is %d\n",person[i].seat,person[i].name,person[i].id);
+                        if(person[i].id>20000&&person[i].id<30000){
+                        	printf("\tseat no: %d is booked by %s booking id is %d\n",person[i].seat,person[i].name,person[i].id);
+							bookings++;
+						}
                     }
+					if(bookings==0)
+					{
+						printf("\n\t\t\t!!!!!!! NO BOOKINGS !!!!!!! \n\n");
+					}
                     printf("\t============================================================\n");
                     break;
                 case 3:
                     printf("\t-----------------THEATER BOOKING DETAILS----------------\n");
                     printf("\t----------------| Spiderman No way Home |---------------\n");
                     printf("\t============================================================\n");
-
-                    if(movie3booking==0)
-                        printf("\n\t\t\t!!!!!!! NO BOOKINGS !!!!!!! \n\n");
-                
-                    for (i=0;i<movie3booking;i++)
+                    for (i=0;i<count;i++)
                     {
-                        if(person[i].id>30000&&person[i].id<40000)
-                        printf("\tseat no: %d is booked by %s booking id is %d\n",person[i].seat,person[i].name,person[i].id);
+                        if(person[i].id>30000&&person[i].id<40000){
+							printf("\tseat no: %d is booked by %s booking id is %d\n",person[i].seat,person[i].name,person[i].id);
+							bookings++;
+						}
                     }
+					if(bookings==0)
+					{
+						printf("\n\t\t\t!!!!!!! NO BOOKINGS !!!!!!! \n\n");
+					}
                     printf("\t============================================================\n");
                     break;
                 default:printf("Movie Not Available\n");
@@ -266,7 +282,7 @@ int movie()
 	scanf("%d",&i);
 	return i;
 }
-int cmovie()
+int Moviedetails()
 {
 	system("clear");
 	int i;
@@ -276,9 +292,11 @@ int cmovie()
 	printf("\t\t\tpress 2 for Captain Marvel\n\n");
 	printf("\t\t\tpress 3 for Spider-Man: Far From Home\n");
 	scanf("%d",&i);
-	return i;		
+	system("clear");
+	return i;	
+
 }
-void ticket1(int choice,char name[10],int id,int price)
+void ticket1(int choice,char name[20],int id,int price)
 {
 		system("clear");
 		printf("\n\n");
@@ -298,7 +316,7 @@ void ticket1(int choice,char name[10],int id,int price)
 		getchar();
         return;
 }
-void ticket2(int choice,char name[10],int id,int price)
+void ticket2(int choice,char name[20],int id,int price)
 {
 		system("clear");
 		printf("\n\n");
@@ -319,7 +337,7 @@ void ticket2(int choice,char name[10],int id,int price)
         return;
 }
 
-void ticket3(int choice,char name[10],int id,int price)
+void ticket3(int choice,char name[20],int id,int price)
 {
 		system("clear");
 		printf("\n\n");

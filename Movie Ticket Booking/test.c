@@ -199,10 +199,10 @@ void details(void)
     system("clear");
 	printf("Enter the password to see details: ");
 	scanf("%s",pass);
-    int selection=Moviedetails();
+    
 	if (strcmp(pass,"pass")==0)
 	{
-		
+		int selection=Moviedetails();
             switch(selection)
             {
                 case 1:
